@@ -3,8 +3,17 @@ import { Request, Response } from "express";
 import mongoose from "mongoose";
 import Post from "../models/post.model";
 
-const getParam = (value: string | string[] | undefined) =>
-    Array.isArray(value) ? value[0] : value;
+// const getParam = (value: string | string[] | undefined) =>
+//     Array.isArray(value) ? value[0] : value;
+
+const getParam = (value: string | string[] | undefined) => {
+    console.log("getParam received value:", value); // Debugging log
+    if (Array.isArray(value)) {
+        return value[0];
+    }
+
+    return value;
+};
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
