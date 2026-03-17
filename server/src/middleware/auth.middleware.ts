@@ -9,7 +9,7 @@ if (!auth0Domain || !auth0Audience) {
   throw new Error("Auth0 domain and audience must be set in environment variables.");
 };
 
-export const authMiddleware = jwt({
+export const checkJwt = jwt({
     secret: JwksRsa.expressJwtSecret({
         cache: true,
         rateLimit: true,

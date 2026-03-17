@@ -1,7 +1,13 @@
 import { useProfileData } from "../hooks/useProfileData";
+import { Logout } from "../components/Logout";
+import { Username } from "../components/Username";
 
 export const Profile = () => {
     const { profileData, loading, error } = useProfileData();
+
+    if (!profileData) {
+        return <Username />;
+    }
 
     if (loading) {
         return <div>Loading...</div>;
@@ -19,6 +25,7 @@ export const Profile = () => {
             <p><strong>Email:</strong> {profileData?.email}</p>
             <p><strong>Followers:</strong> {profileData?.followers.length}</p>
             <p><strong>Following:</strong> {profileData?.following.length}</p>
+            <Logout />
         </div>
     );
 };
