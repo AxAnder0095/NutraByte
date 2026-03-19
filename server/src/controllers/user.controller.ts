@@ -57,7 +57,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
 
 export const getUserById = async (req: Request, res: Response) => {
     try {
-        const user = await User.findById(req.params.id).select("-password");
+        const user = await User.findById(req.params.id).select("-email");
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -76,7 +76,7 @@ export const createUser = async (req: Request, res: Response) => {
             return res.status(401).json({ message: "Missing Auth0 subject in token" });
         }
 
-        const existingUser = await User.findOne({ auth0Id }).select("-password");
+        const existingUser = await User.findOne({ auth0Id });
         if (existingUser) {
             return res.status(200).json(existingUser);
         }
@@ -91,7 +91,7 @@ export const createUser = async (req: Request, res: Response) => {
 
         const newUser = new User({ auth0Id, username, email });
         await newUser.save();
-        const savedUser = await User.findById(newUser._id).select("-password");
+        const savedUser = await User.findById(newUser._id);
         res.status(201).json(savedUser);
     } catch (error) {
         res.status(500).json({ message: "Error creating user", error });
@@ -135,7 +135,7 @@ export const followUser = async (req: Request, res: Response) => {
             User.findByIdAndUpdate(targetId, { $addToSet: { followers: id } }),
         ]);
 
-        const updatedUser = await User.findById(id).select("-password");
+        const updatedUser = await User.findById(id).select("-email");
         res.status(200).json(updatedUser);
     } catch (error) {
         res.status(500).json({ message: "Error following user", error });
@@ -166,7 +166,7 @@ export const unfollowUser = async (req: Request, res: Response) => {
             User.findByIdAndUpdate(targetId, { $pull: { followers: id } }),
         ]);
 
-        const updatedUser = await User.findById(id).select("-password");
+        const updatedUser = await User.findById(id).select("-email");
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
         }
@@ -213,7 +213,7 @@ export const likePost = async (req: Request, res: Response) => {
             id,
             { $addToSet: { likedPosts: postId } },
             { new: true },
-        ).select("-password");
+        ).select("-email");
 
         res.status(200).json(updatedUser);
     } catch (error) {
@@ -244,7 +244,7 @@ export const unlikePost = async (req: Request, res: Response) => {
             id,
             { $pull: { likedPosts: postId } },
             { new: true },
-        ).select("-password");
+        ).select("-email");
 
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });
@@ -292,7 +292,7 @@ export const savePost = async (req: Request, res: Response) => {
             id,
             { $addToSet: { savedPosts: postId } },
             { new: true },
-        ).select("-password");
+        ).select("-email");
 
         res.status(200).json(updatedUser);
     } catch (error) {
@@ -323,7 +323,7 @@ export const unsavePost = async (req: Request, res: Response) => {
             id,
             { $pull: { savedPosts: postId } },
             { new: true },
-        ).select("-password");
+        ).select("-email");
 
         if (!updatedUser) {
             return res.status(404).json({ message: "User not found" });

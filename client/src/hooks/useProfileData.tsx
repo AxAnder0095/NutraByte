@@ -1,5 +1,6 @@
-import { useState, useEffect } from "react";
+import { useState } from "react";
 import api from "../api/api";
+
 
 interface IUser {
     _id: string; // Optional _id field for MongoDB documents
@@ -30,9 +31,9 @@ export const useProfileData = () => {
         }
     };
 
-    useEffect(() => {
-        fetchProfileData();
-    }, []);
+    // useEffect(() => {
+    //     fetchProfileData();
+    // }, []);
 
     return {
         profileData,
