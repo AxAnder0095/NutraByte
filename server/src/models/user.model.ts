@@ -13,7 +13,7 @@ interface IUser {
 
 const UserSchema = new mongoose.Schema<IUser>({
     auth0Id: { type: String, required: [true, "Auth0 user id is required"], unique: true },
-    username: { type: String, required: [true, "Username is required"], unique: true },
+    username: { type: String, unique: [true, "Username must be unique"], sparse: true },
     email: { type: String, required: [true, "Email is required"], unique: true },
     following: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],
     followers: [{ type: mongoose.Schema.Types.ObjectId, ref: "User", default: [] }],

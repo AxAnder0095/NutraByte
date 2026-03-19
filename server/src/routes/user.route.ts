@@ -6,7 +6,7 @@ const router = Router();
     
 router.get("/user", checkJwt, userController.getAllUsers);
 router.get("/user/:id", checkJwt, userController.getUserById);
-router.post("/user", checkJwt, userController.createUser);
+// router.post("/user/create", checkJwt, userController.createUser);
 
 // Follow/unfollow routes
 router.post("/user/:id/follow/:targetId", checkJwt, userController.followUser);

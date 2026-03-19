@@ -67,37 +67,6 @@ export const getUserById = async (req: Request, res: Response) => {
     }
 };
 
-export const createUser = async (req: Request, res: Response) => {
-    try {
-        const authReq = req as AuthenticatedRequest;
-        const auth0Id = getAuth0Sub(authReq);
-
-        if (!auth0Id) {
-            return res.status(401).json({ message: "Missing Auth0 subject in token" });
-        }
-
-        const existingUser = await User.findOne({ auth0Id });
-        if (existingUser) {
-            return res.status(200).json(existingUser);
-        }
-
-        const { username, email } = req.body as { username?: string; email?: string };
-
-        if (!username || !email) {
-            return res.status(400).json({
-                message: "username and email are required when creating a new user",
-            });
-        }
-
-        const newUser = new User({ auth0Id, username, email });
-        await newUser.save();
-        const savedUser = await User.findById(newUser._id);
-        res.status(201).json(savedUser);
-    } catch (error) {
-        res.status(500).json({ message: "Error creating user", error });
-    }
-};
-
 export const followUser = async (req: Request, res: Response) => {
     try {
         const authReq = req as AuthenticatedRequest;

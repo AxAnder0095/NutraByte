@@ -4,6 +4,7 @@ import testRoute from './routes/test.route';
 import sampleRoute from './routes/sample.route';
 import userRoute from './routes/user.route';
 import postRoute from './routes/post.route';
+import createUserRoute from './routes/create-user.route';
 
 const app = express();
 
@@ -15,5 +16,6 @@ app.use('/api', testRoute);
 app.use('/api', sampleRoute);
 app.use('/api', userRoute);
 app.use('/api', postRoute);
+app.use('/api', createUserRoute);
 
 export default app;

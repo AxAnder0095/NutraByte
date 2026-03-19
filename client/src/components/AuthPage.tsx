@@ -1,10 +1,6 @@
-import { useEffect, useState } from "react";
 import { Navigate } from "react-router-dom";
 import { useAuth0 } from "@auth0/auth0-react";
 import '../styles/AuthPage.scss'
-import { useProfileData } from "../hooks/useProfileData";
-import { Logout } from "./Logout";
-
 
 export const AuthPage = () => {
     const { loginWithRedirect, isAuthenticated, isLoading, error } = useAuth0();
