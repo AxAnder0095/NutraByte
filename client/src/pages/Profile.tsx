@@ -22,6 +22,7 @@ export const Profile = () => {
             <h1>Profile</h1>
             <p>This is the profile page.</p>
             <h2>User Information</h2>
+            <p>Testing rename</p>
             {/* <p><strong>Username:</strong> {profileData?.username}</p>
             <p><strong>Email:</strong> {profileData?.email}</p>
             <p><strong>Followers:</strong> {profileData?.followers.length}</p>
