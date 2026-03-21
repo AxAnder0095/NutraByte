@@ -16,6 +16,8 @@ app.use('/api', testRoute);
 app.use('/api', sampleRoute);
 app.use('/api', userRoute);
 app.use('/api', postRoute);
+
+// Route for creating a user via Auth0 webhook
 app.use('/api', createUserRoute);
 
 export default app;
