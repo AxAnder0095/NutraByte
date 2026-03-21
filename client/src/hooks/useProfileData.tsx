@@ -1,8 +1,9 @@
-import { useState } from "react";
+import { useAuth0 } from "@auth0/auth0-react";
+import { useQuery } from "@tanstack/react-query";
 import api from "../api/api";
 
 
-interface IUser {
+export interface IUser {
     _id: string; // Optional _id field for MongoDB documents
     username: string;
     email: string;
@@ -14,31 +15,22 @@ interface IUser {
 }
 
 export const useProfileData = () => {
-    const [profileData, setProfileData] = useState<IUser | null>(null);
-    const [loading, setLoading] = useState(true);
-    const [error, setError] = useState<string | null>(null);
+    const { getAccessTokenSilently, isAuthenticated, isLoading: isAuthLoading } = useAuth0();
 
-    const fetchProfileData = async () => {
-        setLoading(true);
-        try {
-            const response = await api.get<IUser>("/user/");
-            console.log("Profile data fetched:", response.data);
-            setProfileData(response.data);
-        } catch (error) {
-            setError("Failed to fetch profile data");
-        } finally {
-            setLoading(false);
-        }
+    const fetchProfileData = async (): Promise<IUser> => {
+        const authToken = await getAccessTokenSilently();
+        const response = await api.get<IUser>("/user", {
+            headers: {
+                Authorization: `Bearer ${authToken}`
+            }
+        });
+
+        return response.data;
     };
 
-
-    // useEffect(() => {
-    //     fetchProfileData();
-    // }, []);
-
-    return {
-        profileData,
-        loading,
-        error
-    };
-}
+    return useQuery<IUser, Error>({
+        queryKey: ["profileData"],
+        enabled: isAuthenticated && !isAuthLoading,
+        queryFn: fetchProfileData
+    });
+};

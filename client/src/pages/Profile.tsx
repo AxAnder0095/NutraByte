@@ -1,10 +1,9 @@
-// import { useProfileData } from "../hooks/useProfileData";
+import { useProfileData } from "../hooks/useProfileData";
 import { Logout } from "../components/Logout";
 // import { Setup } from "./Setup";
-import { Navigate } from "react-router-dom";
 
 export const Profile = () => {
-    // const { profileData, loading, error } = useProfileData();
+    const { data, isLoading, error } = useProfileData();
 
     // if (loading) return <div>Loading...</div>;
     // if (error) return <div>Error: {error}</div>;
@@ -19,14 +18,19 @@ export const Profile = () => {
 
     return (
         <div className="Profile">
+            {isLoading && <div>Loading...</div>}
+            {error && <div>Error: {error.message}</div>}
             <h1>Profile</h1>
             <p>This is the profile page.</p>
             <h2>User Information</h2>
-            <p>Testing rename</p>
-            {/* <p><strong>Username:</strong> {profileData?.username}</p>
-            <p><strong>Email:</strong> {profileData?.email}</p>
-            <p><strong>Followers:</strong> {profileData?.followers.length}</p>
-            <p><strong>Following:</strong> {profileData?.following.length}</p> */}
+            {data && (
+                <div>
+                    <p><strong>Username:</strong> {data.username}</p>
+                    <p><strong>Email:</strong> {data.email}</p>
+                    <p><strong>Followers:</strong> {data.followers.length}</p>
+                    <p><strong>Following:</strong> {data.following.length}</p>
+                </div>
+            )}
             <Logout />
         </div>
     );

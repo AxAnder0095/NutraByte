@@ -46,26 +46,36 @@ const ensureActorOwnsUserId = async (
     return true;
 };
 
-export const getAllUsers = async (req: Request, res: Response) => {
+export const getCurrentUser = async (req: Request, res: Response) => {
     try {
-        const users = await User.find().select("-password");
-        res.status(200).json(users);
-    } catch (error) {
-        res.status(500).json({ message: "Error fetching users", error });
-    }
-};
+        const authReq = req as AuthenticatedRequest;
+        const auth0Sub = getAuth0Sub(authReq);
+        if (!auth0Sub) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
 
-export const getUserById = async (req: Request, res: Response) => {
-    try {
-        const user = await User.findById(req.params.id).select("-email");
+        const user = await User.findOne({ auth0Id: auth0Sub });
         if (!user) {
             return res.status(404).json({ message: "User not found" });
         }
+
         res.status(200).json(user);
     } catch (error) {
-        res.status(500).json({ message: "Error fetching user", error });
+        res.status(500).json({ message: "Error fetching current user", error });
     }
 };
+
+// export const getUserById = async (req: Request, res: Response) => {
+//     try {
+//         const user = await User.findById(req.params.id).select("-email");
+//         if (!user) {
+//             return res.status(404).json({ message: "User not found" });
+//         }
+//         res.status(200).json(user);
+//     } catch (error) {
+//         res.status(500).json({ message: "Error fetching user", error });
+//     }
+// };
 
 export const followUser = async (req: Request, res: Response) => {
     try {

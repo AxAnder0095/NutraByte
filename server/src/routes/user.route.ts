@@ -4,9 +4,7 @@ import * as userController from "../controllers/user.controller";
 
 const router = Router();
     
-router.get("/user", checkJwt, userController.getAllUsers);
-router.get("/user/:id", checkJwt, userController.getUserById);
-// router.post("/user/create", checkJwt, userController.createUser);
+router.get("/user", checkJwt, userController.getCurrentUser);
 
 // Follow/unfollow routes
 router.post("/user/:id/follow/:targetId", checkJwt, userController.followUser);
