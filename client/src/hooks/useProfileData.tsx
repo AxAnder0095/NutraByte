@@ -18,7 +18,11 @@ export const useProfileData = () => {
     const { getAccessTokenSilently, isAuthenticated, isLoading: isAuthLoading } = useAuth0();
 
     const fetchProfileData = async (): Promise<IUser> => {
-        const authToken = await getAccessTokenSilently();
+        const authToken = await getAccessTokenSilently({
+            authorizationParams: {
+                audience: import.meta.env.VITE_AUTH0_AUDIENCE
+            }
+        });
         const response = await api.get<IUser>("/user", {
             headers: {
                 Authorization: `Bearer ${authToken}`

@@ -4,6 +4,7 @@ import User from "../models/user.model";
 interface CreateUserBody {
     auth0Id: string;
     email: string;
+    username?: string;
 };
 
 export const createUser = async (req: Request, res: Response): Promise<void> => {
@@ -16,7 +17,7 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
         return;
     }
 
-    const { auth0Id, email} = req.body as CreateUserBody;
+    const { auth0Id, email, username} = req.body as CreateUserBody;
 
     try {
         const existingUser = await User.findOne({ auth0Id });
@@ -26,11 +27,11 @@ export const createUser = async (req: Request, res: Response): Promise<void> => 
             return;
         }
 
-        const newUser = await User.create({ auth0Id, email});
+        const newUser = await User.create({ auth0Id, email, username });
         console.log("User created successfully:", newUser);
         res.status(201).json(newUser);
     } catch (error) {
-        console.error("Error creating user:", error);
+        console.log("Error creating user:", error);
         res.status(500).json({ message: "Internal server error" });
     }
 };

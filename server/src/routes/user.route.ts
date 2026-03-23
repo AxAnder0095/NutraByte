@@ -5,6 +5,7 @@ import * as userController from "../controllers/user.controller";
 const router = Router();
     
 router.get("/user", checkJwt, userController.getCurrentUser);
+router.patch("/user/username", checkJwt, userController.updateCurrentUsername);
 
 // Follow/unfollow routes
 router.post("/user/:id/follow/:targetId", checkJwt, userController.followUser);

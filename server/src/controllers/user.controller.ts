@@ -65,6 +65,45 @@ export const getCurrentUser = async (req: Request, res: Response) => {
     }
 };
 
+export const updateCurrentUsername = async (req: Request, res: Response) => {
+    try {
+        const authReq = req as AuthenticatedRequest;
+        const auth0Sub = getAuth0Sub(authReq);
+
+        if (!auth0Sub) {
+            return res.status(401).json({ message: "Unauthorized" });
+        }
+
+        const rawUsername = req.body?.username;
+        if (typeof rawUsername !== "string") {
+            return res.status(400).json({ message: "Username is required" });
+        }
+
+        const username = rawUsername.trim();
+        if (!username) {
+            return res.status(400).json({ message: "Username cannot be empty" });
+        }
+
+        const updatedUser = await User.findOneAndUpdate(
+            { auth0Id: auth0Sub },
+            { username },
+            { new: true, runValidators: true },
+        );
+
+        if (!updatedUser) {
+            return res.status(404).json({ message: "User not found" });
+        }
+
+        return res.status(200).json(updatedUser);
+    } catch (error) {
+        if ((error as { code?: number })?.code === 11000) {
+            return res.status(409).json({ message: "Username is already taken" });
+        }
+
+        return res.status(500).json({ message: "Error updating username", error });
+    }
+};
+
 // export const getUserById = async (req: Request, res: Response) => {
 //     try {
 //         const user = await User.findById(req.params.id).select("-email");
