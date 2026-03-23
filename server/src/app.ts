@@ -11,9 +11,11 @@ const app = express();
 app.use(cors({origin: 'http://localhost:5173'}));
 app.use(express.json());
 
-// Routes
+// Test routees
 app.use('/api', testRoute);
 app.use('/api', sampleRoute);
+
+// Routes
 app.use('/api', userRoute);
 app.use('/api', postRoute);
 

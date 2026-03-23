@@ -1,20 +1,8 @@
 import { useProfileData } from "../hooks/useProfileData";
 import { Logout } from "../components/Logout";
-// import { Setup } from "./Setup";
 
 export const Profile = () => {
     const { data, isLoading, error } = useProfileData();
-
-    // if (loading) return <div>Loading...</div>;
-    // if (error) return <div>Error: {error}</div>;
-
-    // if (!profileData?.username) {
-    //     return <Navigate to="/setup" />; // Redirect to setup if username is not set
-    // }
-    
-    // if (error) {
-    //     return <div>{error}</div>;
-    // }
 
     return (
         <div className="Profile">
